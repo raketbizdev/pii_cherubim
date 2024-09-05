@@ -17,7 +17,7 @@
 
 - **Precompiled PII Cherubim Package**: Download the precompiled package for your target platform (Linux, macOS, Windows, etc.).
   
-  You can download the appropriate binary for your platform [here](https://github.com/your-username/pii_cherubim/releases).
+  You can download the appropriate binary for your platform [here](https://github.com/raketbizdev/pii_cherubim/releases).
 
 ### Installation
 
