@@ -15,40 +15,41 @@
 
 ### Prerequisites
 
-- **Rust**: Ensure that you have Rust installed on your server. You can install it via [rustup](https://rustup.rs/).
-
-  ```bash
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  ```
-
-- **Cargo**: This tool is part of the Rust installation and will be used for building and running the package.
+- **Precompiled PII Cherubim Package**: Download the precompiled package for your target platform (Linux, macOS, Windows, etc.).
+  
+  You can download the appropriate binary for your platform [here](https://github.com/your-username/pii_cherubim/releases).
 
 ### Installation
 
-1. Clone the repository:
+1. Download the precompiled package for your operating system from the release page:
 
    ```bash
-   git clone https://github.com/your-username/pii_cherubim.git
-   cd pii_cherubim
+   wget https://github.com/your-username/pii_cherubim/releases/download/v1.0/pii_cherubim-linux-x64.tar.gz
    ```
 
-2. Build the project:
+2. Extract the package:
 
    ```bash
-   cargo build --release
+   tar -xzf pii_cherubim-linux-x64.tar.gz
    ```
 
-3. Add your **API key** and **Secret key** to the environment variables:
+3. Make the binary executable:
+
+   ```bash
+   chmod +x pii_cherubim
+   ```
+
+4. Add your **API key** and **Secret key** to the environment variables:
 
    ```bash
    export PII_API_KEY="your-api-key"
    export PII_SECRET_KEY="your-secret-key"
    ```
 
-4. Run the application in the background:
+5. Run the application in the background:
 
    ```bash
-   nohup cargo run --release &
+   nohup ./pii_cherubim --log /path/to/log/file &
    ```
 
 The package will now run in the background, monitoring your logs and sending reports securely.
@@ -74,14 +75,6 @@ The package will now run in the background, monitoring your logs and sending rep
 
 Audit reports containing PII information that was detected and sanitized can be sent to the configured URL for compliance tracking. Make sure the API and secret keys are set, and the data will be transmitted securely.
 
-### Tests
-
-To run the tests, use the following command:
-
-```bash
-cargo test
-```
-
 ### Example
 
 An example of a sanitized log:
@@ -90,33 +83,3 @@ User ****@*****.com logged in
 ```
 
 The tool detects the email address `john.doe@example.com` and replaces it with asterisks to mask the sensitive information.
-
-### Project Structure
-
-```bash
-.
-├── src
-│   ├── file_utils.rs        # Module for finding log files
-│   ├── log_processor.rs     # Core logic for real-time and historical log processing
-│   ├── lib.rs               # Exposes modules for testing and integration
-│   ├── main.rs              # Application entry point
-│   ├── pii_sanitizer.rs     # Module for PII detection and sanitization
-└── tests                    # Integration tests
-    ├── file_utils_tests.rs
-    ├── log_processor_tests.rs
-    └── pii_sanitizer_tests.rs
-```
-
-### Contributing
-
-Contributions are welcome! Please feel free to submit a pull request or file an issue.
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -m "Add new feature"`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a pull request.
-
-### License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
