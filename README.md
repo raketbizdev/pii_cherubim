@@ -1,27 +1,27 @@
 
 # PII Cherubim
 
-**PII Cherubim** is a Rust-based tool that monitors, sanitizes, and processes Personally Identifiable Information (PII) in log files. It operates in real-time to detect sensitive information, such as email addresses, and masks it to ensure compliance with data protection regulations. It also supports historical log sanitization and integration with a dashboard for auditing.
+**PII Cherubim** is an agent package designed for log security. It provides real-time monitoring, detection, and automatic sanitization of Personally Identifiable Information (PII) in log files, while ensuring compliance with data protection regulations. This lightweight package runs in the background on a server, requiring minimal user intervention. Once installed, it automatically handles Detection and Monitoring, Log Sanitization, and Compliance Auditing.
 
 ## Features
 
-- **Real-time PII Detection**: Monitor log files in real-time and sanitize sensitive information such as email addresses.
-- **Historical Log Sanitization**: Process existing log files and sanitize any detected PII.
-- **System Log Search**: Automatically discover log files within a system based on file naming conventions.
-- **Integration with External Dashboard**: Generate audit reports and send them to a remote dashboard for compliance tracking.
-- **Lightweight and Asynchronous**: Built using asynchronous Rust for efficient log processing without blocking the system.
+- **Real-time PII Detection and Monitoring**: Monitor log files for sensitive data such as emails, credit card numbers, etc., and sanitize them in real-time.
+- **Historical Log Sanitization**: Process and sanitize existing log files that may contain PII.
+- **Compliance and Auditing**: Generate audit reports and send them to a specified URL, ensuring compliance with regulations.
+- **Lightweight and Background Operation**: Once installed, the package runs in the background and requires minimal resources.
+- **Secure API Integration**: Data is securely sent to the specified URL using an API key and secret key to ensure authorized access.
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Rust**: Ensure that you have Rust installed on your machine. You can install it via [rustup](https://rustup.rs/).
-  
+- **Rust**: Ensure that you have Rust installed on your server. You can install it via [rustup](https://rustup.rs/).
+
   ```bash
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
   ```
 
-- **Cargo**: This tool is part of the Rust installation and will be used for building and testing the project.
+- **Cargo**: This tool is part of the Rust installation and will be used for building and running the package.
 
 ### Installation
 
@@ -38,39 +38,43 @@
    cargo build --release
    ```
 
-3. Run the application:
+3. Add your **API key** and **Secret key** to the environment variables:
 
    ```bash
-   cargo run
+   export PII_API_KEY="your-api-key"
+   export PII_SECRET_KEY="your-secret-key"
    ```
 
-## How to Use
+4. Run the application in the background:
 
-### Real-time Log Monitoring
+   ```bash
+   nohup cargo run --release &
+   ```
 
-To monitor a specific log file for PII, run the tool with the path to the log file:
+The package will now run in the background, monitoring your logs and sending reports securely.
 
-```bash
-cargo run -- log_path
-```
+### Configuration
 
-Where `log_path` is the path to your log file.
+- **API Key and Secret Key**: These are required to authenticate the data being sent to the remote URL for auditing purposes. Ensure you set them as environment variables on the server where the package is running:
 
-### Historical Log Sanitization
+   ```bash
+   export PII_API_KEY="your-api-key"
+   export PII_SECRET_KEY="your-secret-key"
+   ```
 
-If you need to sanitize logs retrospectively, you can run the tool with the following command:
+- **Remote URL for Audit Reports**: Ensure that your dashboard URL is correctly configured in the source code or via an environment variable.
 
-```bash
-cargo run --release -- log_path
-```
+### How to Use
 
-This will process all logs in the specified path and sanitize any sensitive data.
+1. **Monitor Logs in Real-Time**: Once installed, the package will automatically monitor your log files and sanitize PII in real-time. Logs will be continuously sanitized in the background.
+
+2. **Audit Reports**: The package generates compliance audit reports and sends them to the URL you provide, ensuring secure and authenticated transmission using the API and secret keys.
 
 ### Sending Audit Reports
 
-The tool can also send audit reports of the detected PII to a remote dashboard. Ensure that your dashboard URL is properly configured in the source code.
+Audit reports containing PII information that was detected and sanitized can be sent to the configured URL for compliance tracking. Make sure the API and secret keys are set, and the data will be transmitted securely.
 
-## Tests
+### Tests
 
 To run the tests, use the following command:
 
@@ -78,12 +82,7 @@ To run the tests, use the following command:
 cargo test
 ```
 
-The tests include:
-- Unit tests for PII sanitization
-- Integration tests for log file processing and PII detection
-- Real-time and historical log file handling
-
-## Example
+### Example
 
 An example of a sanitized log:
 ```plaintext
@@ -92,7 +91,7 @@ User ****@*****.com logged in
 
 The tool detects the email address `john.doe@example.com` and replaces it with asterisks to mask the sensitive information.
 
-## Project Structure
+### Project Structure
 
 ```bash
 .
@@ -108,7 +107,7 @@ The tool detects the email address `john.doe@example.com` and replaces it with a
     └── pii_sanitizer_tests.rs
 ```
 
-## Contributing
+### Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or file an issue.
 
@@ -118,6 +117,6 @@ Contributions are welcome! Please feel free to submit a pull request or file an 
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a pull request.
 
-## License
+### License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
