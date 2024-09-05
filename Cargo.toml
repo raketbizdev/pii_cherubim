@@ -1,6 +1,7 @@
 [package]
 name = "pii_cherubim"
 version = "0.1.0"
+authors = ["Ruel Nopal <i.am@rnopal.com>"]
 edition = "2021"
 
 [dependencies]
