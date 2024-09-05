@@ -24,7 +24,7 @@
 1. Download the precompiled package for your operating system from the release page:
 
    ```bash
-   wget https://github.com/your-username/pii_cherubim/releases/download/v1.0/pii_cherubim-linux-x64.tar.gz
+   wget https://github.com/raketbizdev/pii_cherubim/releases/download/v1.0/pii_cherubim-linux-x64.tar.gz
    ```
 
 2. Extract the package:
