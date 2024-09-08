@@ -1,85 +1,102 @@
 
 # PII Cherubim
 
-**PII Cherubim** is an agent package designed for log security. It provides real-time monitoring, detection, and automatic sanitization of Personally Identifiable Information (PII) in log files, while ensuring compliance with data protection regulations. This lightweight package runs in the background on a server, requiring minimal user intervention. Once installed, it automatically handles Detection and Monitoring, Log Sanitization, and Compliance Auditing.
+**PII Cherubim** is a log security agent that monitors and sanitizes Personally Identifiable Information (PII) in real-time. It ensures compliance with data protection regulations by automatically detecting and masking sensitive information, such as email addresses, in log files. The package runs in the background and requires minimal user intervention once set up.
 
 ## Features
 
-- **Real-time PII Detection and Monitoring**: Monitor log files for sensitive data such as emails, credit card numbers, etc., and sanitize them in real-time.
-- **Historical Log Sanitization**: Process and sanitize existing log files that may contain PII.
-- **Compliance and Auditing**: Generate audit reports and send them to a specified URL, ensuring compliance with regulations.
-- **Lightweight and Background Operation**: Once installed, the package runs in the background and requires minimal resources.
-- **Secure API Integration**: Data is securely sent to the specified URL using an API key and secret key to ensure authorized access.
+- **Real-time PII Detection**: Monitors log files for sensitive data like emails and automatically sanitizes it in real-time.
+- **Historical Log Sanitization**: Sanitizes existing logs containing PII.
+- **Background Operation**: Runs seamlessly in the background, requiring minimal system resources.
+- **Secure Data Transmission**: Integrates securely with external auditing endpoints using API keys for authorization.
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Precompiled PII Cherubim Package**: Download the precompiled package for your target platform (Linux, macOS, Windows, etc.).
-  
-  You can download the appropriate binary for your platform [here](https://github.com/raketbizdev/pii_cherubim/releases).
+To run PII Cherubim, you'll need:
 
-### Installation
-
-1. Download the precompiled package for your operating system from the release page:
+- **Rust toolchain**: Install Rust if not already installed by running:
 
    ```bash
-   wget https://github.com/raketbizdev/pii_cherubim/releases/download/v1.0/pii_cherubim-linux-x64.tar.gz
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    ```
 
-2. Extract the package:
+- **Precompiled binary** (optional): You can use a precompiled binary for your platform, available [here](https://github.com/raketbizdev/pii_cherubim/releases).
+
+Alternatively, you can compile the project from source using Rust.
+
+### Installation (from Source)
+
+1. Clone the repository:
 
    ```bash
-   tar -xzf pii_cherubim-linux-x64.tar.gz
+   git clone https://github.com/raketbizdev/pii_cherubim.git
+   cd pii_cherubim
    ```
 
-3. Make the binary executable:
+2. Build the project using Cargo:
 
    ```bash
-   chmod +x pii_cherubim
+   cargo build --release
    ```
 
-4. Add your **API key** and **Secret key** to the environment variables:
+3. The executable will be in the `target/release` directory. You can run it directly:
 
    ```bash
-   export PII_API_KEY="your-api-key"
-   export PII_SECRET_KEY="your-secret-key"
+   ./target/release/pii_cherubim
    ```
 
-5. Run the application in the background:
+### Running the Application
 
-   ```bash
-   nohup ./pii_cherubim --log /path/to/log/file &
-   ```
+#### 1. Run in the Background
 
-The package will now run in the background, monitoring your logs and sending reports securely.
+To start monitoring a specific log file in the background, run the following command:
 
-### Configuration
-
-- **API Key and Secret Key**: These are required to authenticate the data being sent to the remote URL for auditing purposes. Ensure you set them as environment variables on the server where the package is running:
-
-   ```bash
-   export PII_API_KEY="your-api-key"
-   export PII_SECRET_KEY="your-secret-key"
-   ```
-
-- **Remote URL for Audit Reports**: Ensure that your dashboard URL is correctly configured in the source code or via an environment variable.
-
-### How to Use
-
-1. **Monitor Logs in Real-Time**: Once installed, the package will automatically monitor your log files and sanitize PII in real-time. Logs will be continuously sanitized in the background.
-
-2. **Audit Reports**: The package generates compliance audit reports and sends them to the URL you provide, ensuring secure and authenticated transmission using the API and secret keys.
-
-### Sending Audit Reports
-
-Audit reports containing PII information that was detected and sanitized can be sent to the configured URL for compliance tracking. Make sure the API and secret keys are set, and the data will be transmitted securely.
-
-### Example
-
-An example of a sanitized log:
-```plaintext
-User ****@*****.com logged in
+```bash
+nohup ./target/release/pii_cherubim --log /path/to/log/file &
 ```
 
-The tool detects the email address `john.doe@example.com` and replaces it with asterisks to mask the sensitive information.
+This will start the PII Cherubim process, which will continuously monitor and sanitize PII in the specified log file.
+
+#### 2. Real-Time Log Monitoring
+
+When running the application, PII Cherubim will continuously monitor the specified log file for changes. If any sensitive information like email addresses is detected, it will automatically sanitize it and write the changes back to the log file.
+
+Example:
+```bash
+./pii_cherubim --log /path/to/log/file
+```
+
+The application will sanitize any detected email addresses like `john.doe@example.com`, replacing it with `****@*****.com`.
+
+### How to Configure
+
+#### API Key and Secret Key (Optional)
+
+If you're sending audit reports to a remote server, configure the API key and secret key as environment variables:
+
+```bash
+export PII_API_KEY="your-api-key"
+export PII_SECRET_KEY="your-secret-key"
+```
+
+This ensures secure transmission of audit logs to a remote URL.
+
+### Example Logs
+
+Original log entry:
+
+```plaintext
+[INFO] 2024-09-08 10:15:32 - User john.doe@example.com successfully logged in.
+```
+
+After PII sanitization:
+
+```plaintext
+[INFO] 2024-09-08 10:15:32 - User ****@*****.com successfully logged in.
+```
+
+### Cleaning Historical Logs
+
+To process historical log files that may contain PII, PII Cherubim will automatically sanitize the existing log files as part of its operation. You do not need to run separate commands to sanitize historical data.
